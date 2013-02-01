@@ -1,4 +1,10 @@
 #! /bin/bash
+# This script is based off of the flac2mp3 script floating arround on the 
+#   internet. It's intent is to recursively triverse the current directly and
+#   its children to find all of the ogg files, and then convert them to mp3 
+#   in the same directory. This uses ffmpeg. I'm sure theres a better option,
+#   but at the moment this works.
+#
 
 find . -type f -name "*.ogg" -print0 | while read -d $'\0' a
 do
