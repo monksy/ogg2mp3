@@ -1,0 +1,17 @@
+#! /bin/bash
+
+find . -type f -name "*.ogg" -print0 | while read -d $'\0' a
+do
+    OUTF=${a%.ogg}.mp3
+
+    ARTIST=`ogginfo "$a" | grep artist | sed s/.*=//g`
+    TITLE=`ogginfo "$a" | grep title | sed s/.*=//g`
+    ALBUM=`ogginfo "$a" | grep album | sed s/.*=//g`
+    GENRE=`ogginfo "$a" | grep genre | sed s/.*=//g`
+    TRACKNUMBER=`ogginfo "$a" | grep track | sed s/.*=//g`
+    DATE=`ogginfo "$a" | grep date | sed s/.*=//g`
+
+    ffmpeg -i "$a" "$OUTF"
+    id3 -t "$TITLE" -T "${TRACKNUMBER:-0}" -a "$ARTIST" -A "$ALBUM" -y "$DATE" -g "${GENRE:-12}" "$OUTF"
+
+done
